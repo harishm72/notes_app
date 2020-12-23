@@ -2,9 +2,9 @@ import express from "express";
 import session, { Store } from "express-session";
 import { SESSION_OPTIONS } from "./config";
 import { clientError, internalServerError } from "./errors";
-import { register } from "./routes";
+import { home, login, register } from "./routes";
 
-export const createApp = (store: Store) => {  
+export const createApp = (store: Store) => {
   const app = express();
 
   app.use(express.json());
@@ -15,6 +15,10 @@ export const createApp = (store: Store) => {
       store,
     })
   );
+
+  app.use(home);
+
+  app.use(login);
 
   app.use(register);
 
