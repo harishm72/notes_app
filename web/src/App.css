@@ -1,0 +1,49 @@
+aside {
+  background-color: white;
+  box-shadow: 2px 2px 6px 0px darkgrey;
+  z-index: 1;
+}
+
+main {
+  background-color: #e2e8f0;
+  height: 100%;
+  padding: 1rem;
+  position: relative;
+}
+
+.nav-bar {
+  position: fixed;
+  /* width: 100%; */
+  top: 0;
+  right: 0;
+  z-index: 2;
+  padding: 0.5rem;
+  display: flex;
+}
+
+.content-section {
+  margin-top: 40px;
+  box-shadow: 2px 2px 6px 0px darkgrey;
+  height: 90%;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+
+.card {
+  box-shadow: 0px 0px 4px 4px #e2e8f0;
+  margin: 24px 12px;
+  border-radius: 4px;
+  padding: 8px;
+  width: 220px;
+}
+
+.app {
+  display: grid;
+  width: 1280px;
+  grid-template-columns: 30ch 1fr;
+  height: 100vh;
+  margin: 0 auto;
+}
