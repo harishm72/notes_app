@@ -1,11 +1,13 @@
-import { RSA_NO_PADDING } from "constants";
 import { Router } from "express";
+import { PrismaClient } from "@prisma/client";
+
 import { logOut, logIn } from "../auth";
 import { UnAuthorized } from "../errors";
 import { catchAsync, ensureAuth, ensureGuest } from "../middleware";
-import { User } from "../models/user";
 import { loginSchema } from "../validations";
 import { validate } from "../validations/joi";
+import { hash } from "bcryptjs";
+import { BCRYPT_WORK_FACTOR } from "../config";
 
 const router = Router();
 
@@ -17,9 +19,19 @@ router.post(
 
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    console.log(email, password);
 
-    if (!user || !(await user.matchesPassword(password))) {
+    const prisma = new PrismaClient();
+
+    const hashedPassword = await hash(password, BCRYPT_WORK_FACTOR);
+
+    const user = await prisma.user.findUnique({
+      where: {
+        emailId: email,
+      },
+    });
+
+    if (!user || user?.password !== hashedPassword) {
       throw new UnAuthorized("Incorrect");
     }
 

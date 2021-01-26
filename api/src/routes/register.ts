@@ -2,9 +2,11 @@ import { Router } from "express";
 import { logIn } from "../auth";
 import { BadRequest } from "../errors";
 import { ensureGuest, catchAsync } from "../middleware";
-import { User } from "../models/user";
 import { registerSchema } from "../validations";
 import { validate } from "../validations/joi";
+import { PrismaClient } from "@prisma/client";
+import { hash } from "bcryptjs";
+import { BCRYPT_WORK_FACTOR } from "../config";
 
 const router = Router();
 
@@ -14,21 +16,33 @@ router.post(
   catchAsync(async (req, res) => {
     await validate(registerSchema, req.body);
 
-    const { name, email, password } = req.body;
+    const { fullName, email, password } = req.body;
 
-    const found = await User.exists({ email });
+    const prisma = new PrismaClient();
+
+    const found = await prisma.user.findFirst({
+      where: {
+        emailId: email,
+      },
+    });
 
     if (found) {
       throw new BadRequest("Email is already taken");
     }
 
-    const user = await User.create({
-      email,
-      name,
-      password,
+    const hashedPassword = await hash(password, BCRYPT_WORK_FACTOR);
+    console.log(hashedPassword);
+    
+
+    const newUser = await prisma.user.create({
+      data: {
+        fullName: fullName,
+        emailId: email,
+        password: hashedPassword
+      },
     });
 
-    logIn(req, user.id);
+    logIn(req, newUser.id);
 
     res.json({ message: "OK" });
   })
