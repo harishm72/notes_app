@@ -19,8 +19,6 @@ router.post(
 
     const { email, password } = req.body;
 
-    console.log(email, password);
-
     const prisma = new PrismaClient();
 
     const hashedPassword = await hash(password, BCRYPT_WORK_FACTOR);
