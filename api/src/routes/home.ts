@@ -13,7 +13,7 @@ router.get(
 
     const user = await prisma.user.findFirst({
       where: {
-        id: req.session?.userID,
+        id: req.session?.userId,
       },
       select: {
         id: true,
@@ -35,7 +35,7 @@ router.get(
 
     const user = await prisma.user.findFirst({
       where: {
-        id: req.session?.userID,
+        id: req.session?.userId,
       },
     });
 
