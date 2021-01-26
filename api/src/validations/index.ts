@@ -9,13 +9,13 @@ const email = Joi.string()
   .lowercase()
   .trim()
   .required();
-const name = Joi.string().min(3).max(32).trim().required();
+const fullName = Joi.string().min(3).max(32).trim().required();
 const password = Joi.string().min(8).max(BCRYPT_MAX_BYTES, "utf8").required();
 const confirmPassword = Joi.valid(Joi.ref("password")).required();
 
 export const registerSchema = Joi.object({
   email,
-  name,
+  fullName,
   password,
   confirmPassword,
 });
