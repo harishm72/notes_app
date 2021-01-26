@@ -6,7 +6,7 @@ import { UnAuthorized } from "../errors";
 import { catchAsync, ensureAuth, ensureGuest } from "../middleware";
 import { loginSchema } from "../validations";
 import { validate } from "../validations/joi";
-import { hash } from "bcryptjs";
+import { compare, hash } from "bcryptjs";
 import { BCRYPT_WORK_FACTOR } from "../config";
 
 const router = Router();
@@ -21,7 +21,7 @@ router.post(
 
     const prisma = new PrismaClient();
 
-    const hashedPassword = await hash(password, BCRYPT_WORK_FACTOR);
+    // const hashedPassword = compare(password, user.password);
 
     const user = await prisma.user.findUnique({
       where: {
@@ -29,7 +29,7 @@ router.post(
       },
     });
 
-    if (!user || user?.password !== hashedPassword) {
+    if (!user || !(await compare(password, user.password))) {
       throw new UnAuthorized("Incorrect");
     }
 
