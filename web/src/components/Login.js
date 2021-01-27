@@ -124,7 +124,7 @@ const Register = (props) => {
     e.preventDefault();
     setIsLoading(true);
     Axios.post("/register", {
-      name,
+      fullName: name,
       email,
       password,
       confirmPassword,
