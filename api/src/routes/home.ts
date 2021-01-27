@@ -48,7 +48,7 @@ router.get(
       "X-Hasura-Role": "user", // result.role
       "X-Hasura-User-Id": user?.id, // result.user_id
     };
-    res.json(hasuraVariables);
+    res.status(200).json(hasuraVariables);
   })
 );
 
