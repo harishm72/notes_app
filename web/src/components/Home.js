@@ -1,7 +1,36 @@
 import React from "react";
 import { Text, Heading } from "@chakra-ui/react";
+import { gql, useQuery } from "@apollo/client";
+
+const GET_MY_TODOS = gql`
+ query getCurrentUser($id: String!){
+   user(where: { id: { _eq: $id } }) {
+     id
+     fullName
+     emailId
+     createdAt
+   }
+}
+`;
 
 const Home = (props) => {
+  console.log(props.currentUser.id);
+  const { loading, error, data } = useQuery(GET_MY_TODOS, {
+    variables: {
+      id: props.currentUser.id 
+    }
+  });
+
+  console.log(data);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    console.error(error);
+    return <div>Error!</div>;
+  }
+
   return (
     <div>
       <section className="app">
