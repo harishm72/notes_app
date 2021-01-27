@@ -1,25 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
-import Axios from "axios";
 import { useHistory, Switch } from "react-router-dom";
-import { io } from "socket.io-client";
 
 import Protected from "./components/router/Protected";
 import Public from "./components/router/Public";
 import auth from "./auth";
 
-import "./App.css"
-
-// const socket = io("http://localhost:3000");
-
-// socket.on("hello", (arg) => {
-//   console.log(arg); // world
-// });
-
-// console.log(socket);
+import "./App.css";
 
 const App = () => {
-  const history = useHistory();
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [isAuthenticated, setAuthentication] = useState(null);
@@ -51,12 +39,15 @@ const App = () => {
   }, []);
 
   const logout = () => {
-    auth.logout().then(res => {
-      setAuthentication(false)
-    }).catch(err => {
-      console.log(err)
-    })
-  }
+    auth
+      .logout()
+      .then((res) => {
+        setAuthentication(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   if (loading) return <h1>Loading</h1>;
 
